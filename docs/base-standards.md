@@ -70,7 +70,26 @@ Required order:
 
 Do not apply direct code-only fixes in this window without updating OpenSpec artifacts.
 
-## 8. Git Workflow
+## 8. Default to the OpenSpec Workflow for Feature/Behavior Changes (Standing Rule)
+
+**This is a standing instruction — follow it automatically, without being asked each time.** The user should not need to type "/opsx:propose" or explain the OpenSpec process in every message. When a request in this project is a real feature or behavior change, start the OpenSpec workflow (proposal → design → specs → tasks, then apply → verify → archive) on your own initiative before implementing.
+
+**Use the OpenSpec workflow (do this automatically) when the request:**
+- Adds a new capability or changes an existing one
+- Changes a documented business/behavior rule
+- Changes the structure or format of a deliverable
+- Would otherwise leave `openspec/specs/` out of sync with what the system actually does
+
+**Skip the OpenSpec workflow (just make the edit directly) when the request is:**
+- A typo fix, wording tweak, or other trivial, non-behavioral correction
+- A pure documentation clarification that doesn't change what the system does
+- Explicitly framed as "just a quick fix," and the user isn't asking for a tracked change
+
+**If it's ambiguous which category a request falls into, ask the user in one sentence** (e.g. "Is this a full feature — should I run it through the OpenSpec proposal process — or just a quick fix?") rather than silently guessing either way.
+
+**Each distinct feature/change still gets its own OpenSpec change folder.** This standing rule means you don't have to be told to use OpenSpec each time — it does not mean multiple unrelated changes get bundled into one proposal.
+
+## 9. Git Workflow
 
 ### Every Session
 - **At the start**: report the current branch and any uncommitted changes before doing anything else.
@@ -96,4 +115,3 @@ Do not apply direct code-only fixes in this window without updating OpenSpec art
 ### .gitignore
 - Maintain a `.gitignore` for this project. Suggest additions whenever noticing: temporary or system files (`.DS_Store`, `Thumbs.db`), credentials or API keys (`.env`), and any real client or billing data.
 - Never commit files containing client data, passwords, or API keys.
-
