@@ -70,3 +70,30 @@ Required order:
 
 Do not apply direct code-only fixes in this window without updating OpenSpec artifacts.
 
+## 8. Git Workflow
+
+### Every Session
+- **At the start**: report the current branch and any uncommitted changes before doing anything else.
+- **At the end**: summarize what changed, then ask:
+    1. Should these changes be merged into main?
+    2. Should this be pushed to GitHub?
+
+### Branches
+- Always create a new branch before making changes. Never commit directly to main.
+- For everyday/ad-hoc work, name branches after the task, e.g. `fix-invoice-report`, `update-checklist`.
+- **Does not override OpenSpec/frontend conventions**: this plain-naming rule applies to everyday, ad-hoc work only. Changes going through the formal OpenSpec process still use the branch naming defined in [OpenSpec Tasks Mandatory Steps](./openspec-tasks-mandatory-steps.md) (`feature/[change-name]`, with a `-backend`/`-frontend` suffix per [Frontend Standards](./frontend-standards.md)).
+- Only merge into main after explicit confirmation that the result is approved.
+- Ask before deleting a branch, even if it's already merged.
+
+### Commits
+- Use clear, plain-language commit messages: what changed and why.
+- Keep unrelated changes in separate commits.
+
+### Safety
+- Before `reset --hard`, force-pushing, or deleting anything, explain what will happen in plain language and wait for confirmation.
+- Never force-push.
+
+### .gitignore
+- Maintain a `.gitignore` for this project. Suggest additions whenever noticing: temporary or system files (`.DS_Store`, `Thumbs.db`), credentials or API keys (`.env`), and any real client or billing data.
+- Never commit files containing client data, passwords, or API keys.
+
