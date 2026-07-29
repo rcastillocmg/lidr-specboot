@@ -256,6 +256,10 @@ All development follows principles defined in `docs/base-standards.md`:
   - API documentation (OpenAPI)
   - Code documentation
   - Maintenance guidelines
+- **OpenSpec Workflow (Standing Rule)**: `docs/base-standards.md` §8
+  - When the agent must run the full OpenSpec workflow automatically vs. when a quick direct edit is fine
+- **Git Workflow**: `docs/base-standards.md` §9
+  - Session start/end checks, branch naming, commit style, and safety confirmations before destructive actions
 
 ## 🎯 Benefits
 
