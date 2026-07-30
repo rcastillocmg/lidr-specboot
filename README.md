@@ -8,6 +8,20 @@ This repository contains a comprehensive set of development rules, standards, an
 
 It's highly recommended to be used along with Spec-Driven Development frameworks like [OpenSpec](https://github.com/Fission-AI/OpenSpec)
 
+## 🆕 What's New on This Branch (`tighten-decision-workflow`)
+
+Plain-language summary of what this branch changed, for review before merging:
+
+1. **This repo now has its own OpenSpec setup.** Previously, this toolkit told *other* projects how to set up OpenSpec, but never set it up on itself. It now does — that's what made everything below possible to build using the toolkit's own formal change-tracking process.
+2. **No more vague language allowed in specs or task lists.** Words like "if applicable," "if needed," "maybe," and "preferred" are now banned in AI-generated plans. Every gap either becomes a clear decision or an explicitly flagged question — never a silent guess.
+3. **A new "map of the project" file, kept always up to date.** `docs/architecture.md` is a new living document describing where everything lives. A new skill (`update-architecture-doc`) automatically keeps it current every time something changes, so future AI sessions don't have to re-read the entire codebase to get oriented.
+4. **The "clarify a vague idea" step (`enrich-us`) got stricter.** It now reads the project's architecture first, checks against the real code, and — this is the important part — will stop and ask you a direct question instead of guessing when something is a genuine blocker (like not knowing which system a feature belongs to), rather than quietly producing a "finished-looking" answer that's actually incomplete.
+5. **The independent code review step (`adversarial-review`) no longer just reports problems and stops.** If it finds something serious, it now automatically loops back to get it fixed and re-checks before signing off — and it will no longer take someone's word that something was fixed without seeing the actual updated work.
+6. **Pull request write-ups (`commit`) are now more complete by default** — always including what changed by area, what was tested, the review outcome, and any follow-ups, instead of a short note that might skip details.
+7. **Real bugs were caught and fixed during this process, not just found and left.** While double-checking this branch's own work, two real inconsistencies were found and fixed before anything was finalized — see `openspec/changes/archive/2026-07-30-tighten-decision-workflow/reports/2026-07-30-step-13-adversarial-review-tighten-decision-workflow.md` for exactly what those were.
+
+Every step above was tested with real before/after comparisons (not just written and assumed to work) — full detail is saved under `openspec/changes/archive/2026-07-30-tighten-decision-workflow/`.
+
 ## 📁 Repository Structure
 
 ```
