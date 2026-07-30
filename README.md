@@ -20,6 +20,7 @@ It's highly recommended to be used along with Spec-Driven Development frameworks
 │   ├── api-spec.yml             # OpenAPI specification
 │   ├── data-model.md            # Database and domain models
 │   ├── development_guide.md
+│   ├── architecture.md          # Living system map, updated with every change
 ├── ai-specs/
 │   ├── agents/                  # Agent role definitions (backend, frontend, analyst, etc.)
 │   └── skills/                  # Reusable skill prompts/workflows
@@ -59,7 +60,7 @@ Quick Start requirements from OpenSpec official docs:
 
 - Node.js `20.19.0` or higher
 
-Install OpenSpec globally:
+Install OpenSpec globally (this repo's own OpenSpec setup was last verified against `1.7.0`):
 
 ```bash
 npm install -g @fission-ai/openspec@latest
@@ -105,7 +106,7 @@ For detailed guidance and ready-to-use prompt examples, see [Customization](#-cu
 
 ### 4) Point OpenSpec Config to Your `docs/` and `ai-specs/`
 
-After `openspec init` and after copying this repository, update your project's `config.yml` to include your technical context from `docs`.
+After `openspec init` and after copying this repository, update your project's `openspec/config.yaml` (OpenSpec also accepts `config.yml`) to include your technical context from `docs`.
 
 Prompt example to automate this with your copilot:
 
@@ -121,9 +122,9 @@ Requirements:
 - Keep all paths relative to the project root.
 ```
 
-Example (`config.yml`):
+Example (`openspec/config.yaml`):
 
-```yml
+```yaml
 context: |
   Tech stack: TypeScript, Node.js, Express, Prisma, Domain-Driven Design (DDD)
   Architecture: Clean Architecture with Domain, Application, and Presentation layers
@@ -138,14 +139,17 @@ context: |
   - docs/api-spec.yml — API contracts and endpoint definitions
   - docs/data-model.md — domain and data model
   - docs/documentation-standards.md — docs structure and maintenance
+  - docs/architecture.md — living system map, updated with every change
   For implementation: adopt the relevant agent from ai-specs/agents/ (e.g. backend-developer.md for backend, frontend-developer.md for frontend). Use ai-specs/skills/ for workflow guidance when applicable.
 
 # Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
+# Keys must match real OpenSpec artifact IDs (proposal, specs, design, tasks) --
+# an invented key like `_global` won't match anything and only produces a CLI warning.
 rules:
-  # Global: apply ai-specs when creating any artifact
-  _global:
+  proposal:
     - Before creating any artifact, read and apply docs/base-standards.md
+  tasks:
+    - Follow docs/openspec-tasks-mandatory-steps.md for structure, mandatory steps, and the verification checklist
     - For backend-related artifacts, read docs/backend-standards.md and adopt guidelines from ai-specs/agents/backend-developer.md
     - For frontend-related artifacts, read docs/frontend-standards.md and adopt guidelines from ai-specs/agents/frontend-developer.md
     - Use docs/api-spec.yml and docs/data-model.md for API and data consistency in specs and tasks
@@ -216,14 +220,15 @@ Artifacts are managed through OpenSpec directories during this flow, including t
 
 ### Useful Skills
 
-Skills live in `ai-specs/skills/` and are mirrored into `.claude/skills/` and `.cursor/skills/` via relative symlinks, so any copilot can discover them. The agent loads a skill automatically when a request matches its description (per `AGENTS.md` §4). The most useful ones in day-to-day work are **`enrich-us`**, **`using-git-worktrees`**, **`writing-skills`**, and **`code-auditing`**:
+Skills live in `ai-specs/skills/` and are mirrored into `.claude/skills/` and `.cursor/skills/` via relative symlinks, so any copilot can discover them. The agent loads a skill automatically when a request matches its description (per `AGENTS.md` §4). The most useful ones in day-to-day work are **`enrich-us`**, **`using-git-worktrees`**, **`writing-skills`**, **`code-auditing`**, and **`update-architecture-doc`**:
 
-- **`enrich-us`** — Analyze and enhance a vague Jira user story (or raw idea) into an implementation-ready ticket with acceptance criteria, technical detail, and edge cases. Use **before** planning to make sure the team and the AI agree on scope.
+- **`enrich-us`** — Analyze and enhance a vague Jira user story (or raw idea) into an implementation-ready ticket with closed decisions and acceptance criteria, reading `docs/architecture.md` and the existing codebase first, and asking a direct question rather than finalizing when a gap is genuinely blocking. Use **before** planning to make sure the team and the AI agree on scope. Output: `Original` / `Scope` / `Closed Decisions` / `Expected Behavior`.
 - **`using-git-worktrees`** — Set up an isolated workspace before starting feature work or executing a plan, with safe creation, baseline checks, copying of local Claude settings, and a complete cleanup workflow when the work is done.
 - **`writing-skills`** — Author and verify new skills (or refactor existing ones) following TDD-style validation before deployment. Use when adding a skill to `ai-specs/skills/` or editing an existing `SKILL.md`.
 - **`code-auditing`** — Run a systematic 6-phase code quality audit covering security, performance, type safety, dead code, and library best practices, ending with a prioritized action plan. Use for pre-release reviews, technical-debt sweeps, and dependency audits.
+- **`update-architecture-doc`** — Keep `docs/architecture.md` (the project's living "shared memory" document, see `docs/base-standards.md` §11) current and consistently formatted after any capability, module, or cross-cutting decision changes. Invoked as a mandatory step of the OpenSpec task checklist.
 
-Other active skills in this repository: `commit`, `explain`, `meta-prompt`, `update-docs`. See each `ai-specs/skills/<name>/SKILL.md` for the full instructions.
+Other active skills in this repository: `commit` (now requires per-layer, per-test-type, and evaluations detail in every PR description — see `docs/base-standards.md` §10-§11 for the closed-decision and architecture rules behind these changes), `adversarial-review` (now loops back into `/apply` on any Blocker/Major finding instead of stopping at a verdict), `explain`, `meta-prompt`, `update-docs`. See each `ai-specs/skills/<name>/SKILL.md` for the full instructions.
 
 ## 📖 Core Development Rules
 
@@ -260,6 +265,10 @@ All development follows principles defined in `docs/base-standards.md`:
   - When the agent must run the full OpenSpec workflow automatically vs. when a quick direct edit is fine
 - **Git Workflow**: `docs/base-standards.md` §9
   - Session start/end checks, branch naming, commit style, and safety confirmations before destructive actions
+- **Closed-Decision Language**: `docs/base-standards.md` §10
+  - Banned vague qualifiers ("if applicable", "if needed", "maybe", etc.) in specs/tasks; every gap must become an explicit decision or a flagged Open Question
+- **Architecture as Shared Memory**: `docs/base-standards.md` §11 and `docs/architecture.md`
+  - The living system map every change must update before archiving, maintained via the `update-architecture-doc` skill
 
 ## 🎯 Benefits
 

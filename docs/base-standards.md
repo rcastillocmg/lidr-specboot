@@ -31,6 +31,7 @@ For detailed standards and guidelines specific to different areas of the project
 - [Frontend Standards](./frontend-standards.md) - React components, UI/UX guidelines, and frontend architecture
 - [Documentation Standards](./documentation-standards.md) - Technical documentation structure, formatting, and maintenance guidelines, including AI standards like this document
 - [OpenSpec Tasks Mandatory Steps](./openspec-tasks-mandatory-steps.md) - Required checklist and execution rules when creating or updating OpenSpec `tasks.md` files
+- [Architecture](./architecture.md) - Living map of system pieces, domain concepts, and cross-cutting decisions, updated with every change (see §11)
 
 ## 4. Project Skills
 
@@ -115,3 +116,15 @@ Do not apply direct code-only fixes in this window without updating OpenSpec art
 ### .gitignore
 - Maintain a `.gitignore` for this project. Suggest additions whenever noticing: temporary or system files (`.DS_Store`, `Thumbs.db`), credentials or API keys (`.env`), and any real client or billing data.
 - Never commit files containing client data, passwords, or API keys.
+
+## 10. Closed-Decision Language (No Vague Qualifiers)
+
+- **Banned phrases**: OpenSpec artifacts (proposals, specs, designs, tasks) and skill outputs must not contain vague, ambiguity-preserving qualifiers: "if applicable", "if needed", "preferred", "maybe", "possibly", "as appropriate", "when necessary", or "TBD" without an attached owner and date.
+- **Resolve, don't soften**: any instance found must become either an explicit decision, or an explicit "Open Question" entry naming what must be resolved and by whom. Never leave it as a silent soft qualifier.
+- **Mechanical check**: before finalizing or archiving an OpenSpec change, run `grep -inE 'if applicable|if needed|preferred|maybe|possibly|as appropriate' <file>` (or equivalent) against its artifacts and resolve any match.
+
+## 11. Architecture as Shared Memory
+
+- **Living document**: `docs/architecture.md` is a continuously-maintained document covering Purpose, System Overview, Domain/Glossary, Capability Map, Cross-Cutting Decisions Log, Open Questions, and a Change Log.
+- **Update on every change**: `docs/architecture.md` must be updated (Capability Map and Change Log at minimum) before any OpenSpec change is archived, using the `update-architecture-doc` skill rather than ad hoc edits.
+- **Why**: this gives any new agent session shared context about where the pieces of the system live without needing to re-read the whole codebase.

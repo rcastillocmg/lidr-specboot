@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-07-30
+goal: Close the gap between this repo's current OpenSpec-based workflow and a
+  stricter, decision-closed, architecture-aware version of it

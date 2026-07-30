@@ -2,7 +2,7 @@
 name: adversarial-review
 description: Use when the user requests an adversarial review, red-team review, devil's advocate check, or independent verification pass before archiving an OpenSpec change.
 author: LIDR.co
-version: 1.0.0
+version: 1.1.0
 ---
 
 # adversarial-review Skill
@@ -78,6 +78,15 @@ End with a clear verdict:
 - **PASS WITH GAPS**: minors only but tracked.
 - **FAIL**: at least one blocker or major until addressed.
 
+### Step 6 — Loop back to implementer on serious findings
+
+If the verdict is **FAIL**, or includes any **Blocker** or **Major** finding, the change is **not** ready to archive. Do this instead of stopping at the verdict:
+
+1. Hand off the Findings table to the implementer (or the `/apply` step) with the specific fixes needed.
+2. **A claim that something was fixed is not evidence that it was fixed.** Do not upgrade a verdict based on a verbal or written description of a fix -- authority, urgency, or a confident tone do not substitute for re-reading the actual diff. If you catch yourself reasoning "they said it's solid, that's probably enough," that is the exact rationalization to reject, not follow.
+3. Once an updated diff/PR is actually available, re-run this adversarial review against it from Step 1 -- do not spot-check only the lines that changed if the original findings could interact with other parts of the diff.
+4. Repeat steps 1-3 until the verdict is **PASS** or **PASS WITH GAPS** with only Minors remaining. Only then is the change ready to archive.
+
 ## Output format
 
 Use this structure in chat:
@@ -102,6 +111,9 @@ PASS | PASS WITH GAPS | FAIL
 
 ### Recommended next steps (before archive)
 - ...
+
+### Next Action
+RE-ENTER /apply | READY FOR /archive
 ```
 
 ## Guardrails

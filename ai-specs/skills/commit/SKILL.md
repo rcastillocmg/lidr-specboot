@@ -2,7 +2,7 @@
 name: commit
 description: Create focused commits and pull requests following repository standards.
 author: LIDR.co
-version: 1.0.0
+version: 1.1.0
 ---
 # commit Skill
 
@@ -77,8 +77,14 @@ If the user **explicitly** requested no git operations (e.g. "no PR", "only comm
 
 - Use the **GitHub CLI (`gh`)** for all GitHub operations (per repository standards).
 - Create or update the PR for the current branch:
-  - **Title**: Clear, aligned with the commit (e.g. include ticket ID if applicable: `[SCRUM-123] Add candidate filters to position list`).
-  - **Description**: Summarize the change set, link to the ticket if relevant, and note any testing or follow-ups.
+  - **Title**: Clear, aligned with the commit. Include a ticket ID when one exists (e.g. `[SCRUM-123] Add candidate filters to position list`); when there is no ticket, omit the prefix entirely rather than writing a placeholder.
+  - **Description**: MANDATORY sections, not optional judgment calls -- every PR description must include:
+    1. **Per-layer summary**: what changed, broken out by layer touched (backend / frontend / docs / tests). Omit a layer heading entirely if it wasn't touched -- do not include an empty "Frontend: none" placeholder.
+    2. **Tests added/updated, by type**: unit / integration / e2e / smoke, with pass counts and report paths under `specs/<change-name>/reports/` when such reports exist.
+    3. **Evaluations applied**: when this change went through the OpenSpec workflow, state the `adversarial-review` verdict (PASS / PASS WITH GAPS / FAIL) and the Verification Checklist outcome. When it did not (a quick fix per `docs/base-standards.md` §8's exception), state that explicitly instead (e.g. "No OpenSpec change -- quick fix, adversarial-review not run") rather than treating the checklist as satisfied by omission.
+    4. **Link to the OpenSpec change folder** (`openspec/changes/<change-name>/`).
+    5. **Open follow-ups**, or an explicit statement that there are none.
+  - This applies regardless of time pressure or a request to "keep it short" -- these five items fit in a short PR description; "short" means concise phrasing, not omitted substance. If asked to specifically cut one of these five, treat that as a real trade-off to flag back to the user, not something to silently drop.
 - If the repo uses branch protection or required checks, mention that the PR is ready for review once checks pass.
 
 ## 6. Summary for the user

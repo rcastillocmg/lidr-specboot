@@ -1,0 +1,29 @@
+schema: spec-driven
+
+# Project context
+# NOTE: this repo IS the toolkit ("specboot") itself, not a project that
+# consumes it. docs/ and ai-specs/ describe the standards this repo
+# enforces on itself (governance docs, skills, agent definitions) -- there
+# is no separate backend/frontend application codebase here.
+context: |
+  This is the lidr-specboot repository: a toolkit of AI-agent development
+  standards, skills, and agent definitions, distributed via
+  packages/specboot for use in other projects. Changes made in this repo
+  are to governance documents (docs/base-standards.md and friends),
+  reusable skills (ai-specs/skills/*), and agent role definitions
+  (ai-specs/agents/*) -- not to application code.
+
+  Single source of truth: docs/base-standards.md
+  Mandatory task-authoring rules: docs/openspec-tasks-mandatory-steps.md
+  Skills: ai-specs/skills/* (mirrored via symlinks into .claude/skills and
+  .cursor/skills -- see docs/base-standards.md Symlink Integrity section)
+  Agents: ai-specs/agents/*
+  packages/specboot/template/ is the distributable copy for OTHER
+  projects and is out of scope for changes to this repo's own behavior.
+
+# Per-artifact rules
+rules:
+  tasks:
+    - Follow docs/openspec-tasks-mandatory-steps.md for structure, mandatory steps, and the verification checklist.
+  proposal:
+    - Follow docs/base-standards.md as the single source of truth for project-wide rules.

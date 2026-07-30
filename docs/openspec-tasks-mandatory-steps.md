@@ -25,11 +25,14 @@ All implementation tasks MUST include these steps in the correct order:
 - **Action**: Create and switch to feature branch before any code changes
 
 ### Mandatory Steps (Must Be Included):
-- **Step N**: Review and Update Existing Unit Tests (MANDATORY)
-- **Step N+1**: Run Unit Tests and Verify Database State (MANDATORY)
-- **Step N+2**: Manual Endpoint Testing with curl (MANDATORY) - **AGENT MUST EXECUTE**
-- **Step N+3**: E2E Testing with Playwright MCP (MANDATORY if applicable) - **AGENT MUST EXECUTE**
-- **Step N+4**: Update Technical Documentation (MANDATORY)
+- **Step N**: Review and Update Existing Unit Tests (MANDATORY, or explicitly marked **Not Applicable** with a one-line reason when there is no application code in the change)
+- **Step N+1**: Run Unit Tests and Verify Database State (MANDATORY, or explicitly marked **Not Applicable** with a one-line reason when there is no application code/database in the change)
+- **Step N+2**: Manual Endpoint Testing with curl (MANDATORY, or explicitly marked **Not Applicable** with a one-line reason when there are no backend endpoints in the change) - **AGENT MUST EXECUTE** when applicable
+- **Step N+3**: E2E Testing with Playwright MCP (MANDATORY — see Applicability Rule below, or explicitly marked **Not Applicable** with a one-line reason) - **AGENT MUST EXECUTE** when applicable
+- **Step N+4**: Update Architecture Doc (MANDATORY) - see §11 in `docs/base-standards.md`
+- **Step N+5**: Update Technical Documentation (MANDATORY)
+
+No mandatory step may be silently omitted from `tasks.md`. If a step does not apply to a given change, `tasks.md` MUST include it anyway, marked **Not Applicable** with a one-line reason (see `docs/base-standards.md` §10, Closed-Decision Language).
 
 ## 3. Manual Testing Requirements - CRITICAL: Agent Must Execute
 
@@ -152,7 +155,7 @@ All implementation tasks MUST include these steps in the correct order:
 6. **Test Error Cases**:
    - Test with invalid data (validation errors)
    - Test with non-existent resources (404 errors)
-   - Test with unauthorized access (if applicable)
+   - Test with unauthorized access when the endpoint has an authorization requirement; if it has none, state "no authorization requirement on this endpoint" rather than skipping silently
    - Verify error response format matches API specification
 
 7. **Mark Task as Completed**: Only after all curl tests pass and database state is restored, mark the task as completed in `tasks.md`
@@ -171,14 +174,14 @@ All implementation tasks MUST include these steps in the correct order:
 - Do not skip manual testing even if unit tests pass
 - **Task completion in tasks.md can only be marked after successful execution of all curl tests**
 
-### Step N+3: E2E Testing with Playwright MCP (MANDATORY if applicable)
+### Step N+3: E2E Testing with Playwright MCP (MANDATORY - see Applicability Rule)
 
 **Agent Responsibility**: The coding agent MUST execute all E2E tests using Playwright MCP tools. This is NOT optional and cannot be delegated to the user.
 
-**When This Applies**:
-- Frontend changes that affect user workflows
-- Integration between frontend and backend endpoints
-- User-facing features that require browser interaction
+**Applicability Rule** (closed decision, not "if applicable"):
+- **Applies** when ANY of: the change touches frontend code that affects a user workflow; the change integrates a frontend with backend endpoints; the change adds or modifies a user-facing feature requiring browser interaction.
+- **Does not apply** when the change has no frontend/browser-facing surface (e.g. backend-only, or docs/skills/governance-only changes).
+- If this step does not apply, `tasks.md` MUST state so explicitly (e.g. "Step N+3 — Not Applicable: no frontend/browser surface in this change") rather than omitting the step.
 
 **Implementation Steps** (Agent must perform):
 1. **Prepare Test Environment**:
@@ -230,6 +233,26 @@ All implementation tasks MUST include these steps in the correct order:
 - Document test scenarios and outcomes in a report in the spec folder with proper naming
 - **Task completion in tasks.md can only be marked after successful execution of all E2E tests**
 
+### Step N+4: Update Architecture Doc (MANDATORY)
+
+**Agent Responsibility**: The coding agent MUST invoke the `update-architecture-doc` skill to keep `docs/architecture.md` current. This is NOT optional and cannot be delegated to the user.
+
+**Implementation Steps** (Agent must perform):
+1. Invoke the `update-architecture-doc` skill rather than editing `docs/architecture.md` ad hoc.
+2. Update the Capability Map with any new/changed capability introduced by this change.
+3. Append an entry to the Change Log naming this change.
+4. Note any new Cross-Cutting Decisions or Open Questions surfaced during the change.
+
+**Dependencies**:
+- `docs/architecture.md` exists (see `docs/base-standards.md` §11)
+- `update-architecture-doc` skill available
+
+**Notes**:
+- **The agent MUST perform this update itself** - never ask the user to update the architecture doc
+- This step applies to every change, including docs/skills-only changes - it is never marked Not Applicable
+- "Docs can wait" is not an acceptable reason to skip or defer this step
+- **Task completion in tasks.md can only be marked after `docs/architecture.md` is updated**
+
 ## 4. Verification Checklist
 
 Before finalizing any `tasks.md` file, verify:
@@ -239,9 +262,11 @@ Before finalizing any `tasks.md` file, verify:
 - [ ] Mandatory steps are clearly marked with "(MANDATORY)" label
 - [ ] Branch naming follows the convention: `feature/[name]-backend`
 - [ ] Step N+1 includes report path and naming convention in `specs/<change-name>/reports/`
-- [ ] Manual testing steps explicitly state "AGENT MUST EXECUTE"
-- [ ] Tasks include database state restoration steps
-- [ ] E2E testing step is included if frontend changes are involved
+- [ ] Manual testing steps explicitly state "AGENT MUST EXECUTE" (when applicable)
+- [ ] Tasks include database state restoration steps (when applicable)
+- [ ] E2E testing step is included, either executed or explicitly marked "Not Applicable" with a one-line reason per the Applicability Rule
+- [ ] Update Architecture Doc step (Step N+4) is included and never marked Not Applicable
+- [ ] No banned vague-qualifier phrases remain in `tasks.md` (see `docs/base-standards.md` §10) — run `grep -inE 'if applicable|if needed|preferred|maybe|possibly|as appropriate' tasks.md`
 
 ## 5. When This Applies
 
@@ -284,7 +309,7 @@ This rule applies when:
 - [ ] 10.7 Document all curl commands and responses
 - [ ] 10.8 Verify database state matches pre-test state
 
-## 11. Frontend: E2E Testing with Playwright MCP (MANDATORY if applicable - AGENT MUST EXECUTE)
+## 11. Frontend: E2E Testing with Playwright MCP (MANDATORY - see Applicability Rule - AGENT MUST EXECUTE when applicable)
 - [ ] 11.1 Ensure frontend and backend servers are running
 - [ ] 11.2 Navigate to application using Playwright MCP browser_navigate
 - [ ] 11.3 Execute complete user workflow using Playwright MCP tools
@@ -292,6 +317,13 @@ This rule applies when:
 - [ ] 11.5 Verify data persistence and UI state
 - [ ] 11.6 Restore test environment and database state
 - [ ] 11.7 Document test scenarios and outcomes
+<!-- Or, if not applicable: "## 11. Frontend: E2E Testing with Playwright MCP - Not Applicable: no frontend/browser surface in this change" -->
+
+## 12. Update Architecture Doc (MANDATORY)
+- [ ] 12.1 Invoke the `update-architecture-doc` skill
+- [ ] 12.2 Update the Capability Map with any new/changed capability
+- [ ] 12.3 Append an entry to the Change Log naming this change
+- [ ] 12.4 Note any new Cross-Cutting Decisions or Open Questions
 
 ## 16. Update Technical Documentation (MANDATORY)
 ...
