@@ -1,7 +1,7 @@
 ## 0. Setup: Create Feature Branch (MANDATORY - FIRST STEP)
 
-- [ ] 0.1 Create feature branch `feature/require-addition-consistency-check` from main
-- [ ] 0.2 Verify branch creation and current branch status
+- [x] 0.1 Create feature branch `feature/require-addition-consistency-check` from main
+- [x] 0.2 Verify branch creation and current branch status
 
 ## 1. Consistency Check Against Existing Artifacts (MANDATORY)
 
