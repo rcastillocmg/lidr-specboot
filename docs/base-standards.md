@@ -38,6 +38,7 @@ For detailed standards and guidelines specific to different areas of the project
 - Skills live in `ai-specs/skills`.
 - When a request matches a skill, load and follow the corresponding `SKILL.md` automatically before continuing.
 - Also load any referenced files in the skill folder (for example, `references/*.md`) when the skill requires them.
+- **Save location prompt**: whenever a new skill or agent is created, ask the user whether to save it locally (this project only, in `ai-specs/skills`) or globally (available across all projects, in the user's global skills library). Do not choose a default silently — wait for the answer before saving.
 
 ## 5. Planning Model Requirement
 
