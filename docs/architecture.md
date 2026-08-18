@@ -33,6 +33,7 @@ This repo (`lidr-specboot`) IS the toolkit: a bundle of AI-agent development sta
 | `adversarial-review` | `ai-specs/skills/adversarial-review/SKILL.md` | `tighten-decision-workflow` (tightened; skill existed informally before) |
 | `commit-pr-summary` | `ai-specs/skills/commit/SKILL.md` | `tighten-decision-workflow` (tightened; skill existed informally before) |
 | `openspec-task-planning` | `docs/openspec-tasks-mandatory-steps.md` | `tighten-decision-workflow` (tightened; doc existed before) |
+| `ai-governance-copilot` | `ai-specs/skills/cmg-ai-governance-copilot/SKILL.md` + `docs/base-standards.md` §12 | `add-ai-governance-copilot-default-skill` |
 
 ## Cross-Cutting Decisions Log
 
@@ -40,6 +41,8 @@ This repo (`lidr-specboot`) IS the toolkit: a bundle of AI-agent development sta
 - **`packages/specboot/template/` left untouched**: it already diverged from this repo's own `docs/`/`ai-specs/` independently of this change; syncing it is a separate, larger effort, not folded in here.
 - **Claude Code/Cursor partial OpenSpec skill install**: this repo's pre-existing `openspec-sync-specs` skill collides in name with one of OpenSpec's built-in skills. Claude Code and Cursor received only 3 of 6 built-in OpenSpec skills and no command shortcuts; Codex and Gemini installed cleanly. Accepted as a known, deferred gap (user decision) — not fixed as part of `tighten-decision-workflow`.
 - **`enrich-us` output format**: the old free-form "Enhanced" section is removed outright rather than kept as a parallel recap, since a second prose restatement of the same Closed Decisions creates a place for them to silently drift apart; one section per decision is the safer choice.
+- **`cmg-ai-governance-copilot` sourced as a project-local copy, not a cross-repo symlink**: its canonical source is the separate `CMG_AI_Governance` repo, outside this project's own `ai-specs` symlink convention (§6). A cross-repo symlink would break for anyone without that exact sibling folder (a teammate, a fresh GitHub clone, CI), so a point-in-time copy was chosen instead, with drift documented as an accepted trade-off in `docs/base-standards.md` §12 (user decision, 2026-08-18, `add-ai-governance-copilot-default-skill`).
+- **`cmg-ai-governance-copilot` frontmatter description rewritten, body left untouched**: a consistency check against this repo's own `writing-skills` rules found the canonical description exceeded the 1024-character frontmatter cap and summarized the whole workflow instead of stating only triggers. The description was rewritten to comply; every operational instruction in the body was kept byte-for-byte identical to the canonical source (user decision, 2026-08-18, `add-ai-governance-copilot-default-skill`).
 
 ## Open Questions
 
@@ -49,3 +52,4 @@ This repo (`lidr-specboot`) IS the toolkit: a bundle of AI-agent development sta
 ## Change Log
 
 - **`tighten-decision-workflow`**: bootstrapped OpenSpec in this repo; added `closed-decision-language` and `architecture-doc-maintenance` capabilities; created this document; tightened `enrich-us` (architecture-doc read, blocking-vs-non-blocking gap classification, new output format), `adversarial-review` (loop-back-to-implementer on Blocker/Major), and `commit` (five mandatory PR-description sections); fixed the pre-existing vague-language instance in `docs/openspec-tasks-mandatory-steps.md`; synced `README.md`.
+- **`add-ai-governance-copilot-default-skill`**: added the `ai-governance-copilot` capability -- a project-local copy of the CMG AI Governance Co-Pilot skill at `ai-specs/skills/cmg-ai-governance-copilot/SKILL.md`, symlinked into `.claude/skills` and `.cursor/skills`, and declared a standing default in `docs/base-standards.md` §12; frontmatter description rewritten for local skill-format compliance, body kept byte-for-byte identical to the canonical `CMG_AI_Governance` source.
