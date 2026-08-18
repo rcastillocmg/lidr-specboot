@@ -29,8 +29,9 @@ All implementation tasks MUST include these steps in the correct order:
 - **Step N+1**: Run Unit Tests and Verify Database State (MANDATORY, or explicitly marked **Not Applicable** with a one-line reason when there is no application code/database in the change)
 - **Step N+2**: Manual Endpoint Testing with curl (MANDATORY, or explicitly marked **Not Applicable** with a one-line reason when there are no backend endpoints in the change) - **AGENT MUST EXECUTE** when applicable
 - **Step N+3**: E2E Testing with Playwright MCP (MANDATORY — see Applicability Rule below, or explicitly marked **Not Applicable** with a one-line reason) - **AGENT MUST EXECUTE** when applicable
-- **Step N+4**: Update Architecture Doc (MANDATORY) - see §11 in `docs/base-standards.md`
-- **Step N+5**: Update Technical Documentation (MANDATORY)
+- **Step N+4**: Consistency Check Against Existing Artifacts (MANDATORY) - see §13 in `docs/base-standards.md`, never marked Not Applicable
+- **Step N+5**: Update Architecture Doc (MANDATORY) - see §11 in `docs/base-standards.md`
+- **Step N+6**: Update Technical Documentation (MANDATORY)
 
 No mandatory step may be silently omitted from `tasks.md`. If a step does not apply to a given change, `tasks.md` MUST include it anyway, marked **Not Applicable** with a one-line reason (see `docs/base-standards.md` §10, Closed-Decision Language).
 
@@ -233,7 +234,27 @@ No mandatory step may be silently omitted from `tasks.md`. If a step does not ap
 - Document test scenarios and outcomes in a report in the spec folder with proper naming
 - **Task completion in tasks.md can only be marked after successful execution of all E2E tests**
 
-### Step N+4: Update Architecture Doc (MANDATORY)
+### Step N+4: Consistency Check Against Existing Artifacts (MANDATORY)
+
+**Agent Responsibility**: The coding agent MUST check every new artifact this change adds (a skill, an agent, an OpenSpec capability, a documentation section, a symlink, or any other addition under `ai-specs/`, `docs/`, `.claude/`, `.cursor/`, or `openspec/`) against what already exists in this repo, per `docs/base-standards.md` §13. This is NOT optional and cannot be delegated to the user, and it is never marked Not Applicable — a small change still costs little to check, and a check that finds nothing is still a completed check.
+
+**Implementation Steps** (Agent must perform):
+1. For each new artifact this change adds, check it against: existing skill names/descriptions in `ai-specs/skills/*/SKILL.md`, existing agent definitions in `ai-specs/agents/*.md`, existing capability names in `openspec/specs/*/spec.md`, `docs/base-standards.md` and the docs it links to, and `docs/architecture.md`'s Capability Map.
+2. Classify anything found as one of: a naming collision, an overlapping trigger/scope, contradictory wording, or convention non-compliance (see `docs/base-standards.md` §13 for the full taxonomy).
+3. Resolve each conflict found before finalizing `tasks.md`, or record it as an explicit Open Question in the change's `design.md` per §10 (Closed-Decision Language) — never proceed with an unresolved, unflagged conflict.
+4. Document the outcome of the check in `tasks.md` itself (what was checked, what was found, if anything), even when nothing was found.
+
+**Dependencies**:
+- `docs/base-standards.md` §13 (Consistency Check Before Any Addition) exists
+- Read access to `ai-specs/skills/`, `ai-specs/agents/`, `openspec/specs/`, `docs/`
+
+**Notes**:
+- **The agent MUST perform this check itself** - never ask the user to verify consistency
+- This step applies to every change, including docs/skills-only changes - it is never marked Not Applicable
+- A check that finds no conflicts is still a completed check, not a skipped one — say so explicitly in `tasks.md`
+- **Task completion in tasks.md can only be marked after this check is performed and its outcome documented**
+
+### Step N+5: Update Architecture Doc (MANDATORY)
 
 **Agent Responsibility**: The coding agent MUST invoke the `update-architecture-doc` skill to keep `docs/architecture.md` current. This is NOT optional and cannot be delegated to the user.
 
@@ -265,7 +286,8 @@ Before finalizing any `tasks.md` file, verify:
 - [ ] Manual testing steps explicitly state "AGENT MUST EXECUTE" (when applicable)
 - [ ] Tasks include database state restoration steps (when applicable)
 - [ ] E2E testing step is included, either executed or explicitly marked "Not Applicable" with a one-line reason per the Applicability Rule
-- [ ] Update Architecture Doc step (Step N+4) is included and never marked Not Applicable
+- [ ] Consistency Check Against Existing Artifacts step (Step N+4) is included, never marked Not Applicable, and its outcome (what was checked, what was found) is documented
+- [ ] Update Architecture Doc step (Step N+5) is included and never marked Not Applicable
 - [ ] No banned vague-qualifier phrases remain in `tasks.md` (see `docs/base-standards.md` §10) — run `grep -inE 'if applicable|if needed|preferred|maybe|possibly|as appropriate' tasks.md`
 
 ## 5. When This Applies
@@ -319,11 +341,17 @@ This rule applies when:
 - [ ] 11.7 Document test scenarios and outcomes
 <!-- Or, if not applicable: "## 11. Frontend: E2E Testing with Playwright MCP - Not Applicable: no frontend/browser surface in this change" -->
 
-## 12. Update Architecture Doc (MANDATORY)
-- [ ] 12.1 Invoke the `update-architecture-doc` skill
-- [ ] 12.2 Update the Capability Map with any new/changed capability
-- [ ] 12.3 Append an entry to the Change Log naming this change
-- [ ] 12.4 Note any new Cross-Cutting Decisions or Open Questions
+## 12. Consistency Check Against Existing Artifacts (MANDATORY)
+- [ ] 12.1 Check each new artifact against existing skill/agent/capability names and governance-doc wording
+- [ ] 12.2 Classify any conflict found (naming collision, overlapping trigger/scope, contradictory wording, convention non-compliance)
+- [ ] 12.3 Resolve each conflict, or record it as an explicit Open Question in `design.md`
+- [ ] 12.4 Document the check's outcome in `tasks.md`, even when nothing was found
+
+## 13. Update Architecture Doc (MANDATORY)
+- [ ] 13.1 Invoke the `update-architecture-doc` skill
+- [ ] 13.2 Update the Capability Map with any new/changed capability
+- [ ] 13.3 Append an entry to the Change Log naming this change
+- [ ] 13.4 Note any new Cross-Cutting Decisions or Open Questions
 
 ## 16. Update Technical Documentation (MANDATORY)
 ...

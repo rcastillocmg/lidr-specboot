@@ -135,3 +135,24 @@ Do not apply direct code-only fixes in this window without updating OpenSpec art
 - **Standing default**: `cmg-ai-governance-copilot` (`ai-specs/skills/cmg-ai-governance-copilot/SKILL.md`) is a standing default skill for this project. It is expected to trigger proactively whenever recurring AI/LLM-assisted building starts in this repo — a new skill, agent, or automation, not a one-off task — including agent-building-agent work, the same way it is embedded by default on the exo cluster platform. As with the OpenSpec workflow rule in §8, this is a proactive-trigger expectation, not a guaranteed technical enforcement mechanism.
 - **Point-in-time copy, not a live link**: the project-local copy is copied from the canonical source in the separate `CMG_AI_Governance` repo as of 2026-08-18. It does not update automatically when the canonical skill changes — re-syncing it is a manual step someone must perform.
 - **Frontmatter intentionally reworded**: the copy's frontmatter `description` was intentionally rewritten at copy time to comply with this repo's own `ai-specs/skills/writing-skills/SKILL.md` rules (1024-character frontmatter cap, trigger-only wording, no workflow summary) — the canonical description exceeded that cap and summarized the whole workflow. The skill body (all seven steps, the hard boundaries) was kept byte-for-byte identical to the canonical source; only the description differs from it, and that divergence is deliberate, not drift.
+
+## 13. Consistency Check Before Any Addition (Standing Rule)
+
+Before finalizing any new artifact added to this project — a skill, an agent, an OpenSpec capability, a documentation section, a symlink, or any other addition under `ai-specs/`, `docs/`, `.claude/`, `.cursor/`, or `openspec/` — check it against what already exists in this repo and resolve or explicitly flag any conflict found. Do not finalize an addition while a found conflict is unresolved and unflagged.
+
+**What counts as a conflict:**
+- **Naming collision**: the same name (skill, capability, agent, symlink target) already exists and would be silently overwritten or shadowed.
+- **Overlapping trigger/scope**: an existing skill or rule already covers the same trigger conditions or responsibility, creating duplicate or contradictory coverage.
+- **Contradictory wording**: the new addition's language conflicts with, or silently supersedes, an existing rule in `docs/base-standards.md` or another governance doc, without updating the older text.
+- **Convention non-compliance**: the addition doesn't follow this repo's own established format rules for that artifact type (for example, `ai-specs/skills/writing-skills/SKILL.md` for skills, the Symlink Integrity rule in §6 for symlinks).
+
+**Where to check:**
+- Existing skill names and descriptions in `ai-specs/skills/*/SKILL.md`
+- Existing agent definitions in `ai-specs/agents/*.md`
+- Existing capability names in `openspec/specs/*/spec.md`
+- `docs/base-standards.md` itself, and the docs it links out to
+- `docs/architecture.md`'s Capability Map and Cross-Cutting Decisions Log
+
+**Resolve, don't skip**: any conflict found must be resolved (adjust the new addition, or explicitly update the conflicting existing artifact) or, if it can't be resolved immediately, recorded as an explicit Open Question in the relevant OpenSpec change's `design.md` — never silently merged with the conflict unaddressed, per §10's Closed-Decision Language rule.
+
+**Mandatory step for OpenSpec changes**: for any change going through the OpenSpec workflow (§8), this consistency check MUST be performed and its outcome noted before `tasks.md` is finalized — see the "Consistency Check Against Existing Artifacts" step in `docs/openspec-tasks-mandatory-steps.md`.

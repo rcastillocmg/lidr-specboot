@@ -291,6 +291,10 @@ All development follows principles defined in `docs/base-standards.md`:
   - Banned vague qualifiers ("if applicable", "if needed", "maybe", etc.) in specs/tasks; every gap must become an explicit decision or a flagged Open Question
 - **Architecture as Shared Memory**: `docs/base-standards.md` §11 and `docs/architecture.md`
   - The living system map every change must update before archiving, maintained via the `update-architecture-doc` skill
+- **CMG AI Governance Co-Pilot (Standing Default Skill)**: `docs/base-standards.md` §12
+  - `cmg-ai-governance-copilot` triggers proactively by default in this repo; see [Useful Skills](#useful-skills) above
+- **Consistency Check Before Any Addition (Standing Rule)**: `docs/base-standards.md` §13
+  - Every new skill, agent, capability, doc section, or symlink must be checked against what already exists before it's finalized; enforced as a mandatory `tasks.md` step in `docs/openspec-tasks-mandatory-steps.md`
 
 ## 🎯 Benefits
 
