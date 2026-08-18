@@ -22,6 +22,13 @@ Plain-language summary of what this branch changed, for review before merging:
 
 Every step above was tested with real before/after comparisons (not just written and assumed to work) — full detail is saved under `openspec/changes/archive/2026-07-30-tighten-decision-workflow/`.
 
+## 📝 Open Proposals (Planned, Not Yet Built)
+
+These two OpenSpec changes have a complete proposal/design/spec/tasks plan under `openspec/changes/`, but nothing has been implemented yet — no skill file, symlink, or doc edit from either one exists in the repo yet:
+
+1. **[`add-ai-governance-copilot-default-skill`](openspec/changes/add-ai-governance-copilot-default-skill/proposal.md)** — embeds CMG's AI Governance Co-Pilot skill into this project by default (a project-local copy, symlinked into `.claude/skills` and `.cursor/skills`, declared a standing default in `docs/base-standards.md`), so governance coverage doesn't depend on any one person's personal global Claude settings.
+2. **[`require-addition-consistency-check`](openspec/changes/require-addition-consistency-check/proposal.md)** — adds a standing rule requiring every future addition to this project (a skill, agent, capability, doc section, or symlink) to be checked against what already exists before it's finalized, plus a new mandatory step in `docs/openspec-tasks-mandatory-steps.md` enforcing that check on every future change.
+
 ## 📁 Repository Structure
 
 ```
